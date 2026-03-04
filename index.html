@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="那須旅しおり">
+<meta name="theme-color" content="#FFB5C2">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<title>旅のしおり 🌸 那須旅行</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FFB5C2;
+    --pink-light: #FFE4EA;
+    --pink-dark: #E8899A;
+    --blue: #A8D8EA;
+    --blue-light: #D6EFF8;
+    --yellow: #FFF3B0;
+    --yellow-dark: #FFE066;
+    --green: #B8E6C8;
+    --green-dark: #7BC89C;
+    --orange: #FFD4A8;
+    --bg: #FFF9F5;
+    --text: #4A3728;
+    --text-light: #8B7355;
+    --white: #FFFFFF;
+    --shadow: 0 2px 12px rgba(74, 55, 40, 0.08);
+    --shadow-lg: 0 4px 24px rgba(74, 55, 40, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Maru Gothic', 'M PLUS Rounded 1c', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-light) 50%, var(--blue-light) 100%);
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 32px 32px;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -10px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+  }
+  .header-emoji {
+    font-size: 48px;
+    margin-bottom: 8px;
+    display: block;
+    animation: bounce 2s ease infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .header h1 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 8px;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+  .header .dates {
+    display: inline-block;
+    background: var(--white);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== TAB NAV ===== */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding: 12px 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    border: none;
+    background: none;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-light);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    color: var(--text);
+    border-bottom-color: var(--pink-dark);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    display: none;
+    padding: 16px;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== DAY HEADER ===== */
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+  .day-number {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .day1-color { background: linear-gradient(135deg, var(--pink), var(--pink-dark)); }
+  .day2-color { background: linear-gradient(135deg, var(--blue), #7BB8D0); }
+  .day-info h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .day-info p {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    position: relative;
+    padding-left: 20px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--pink-light), var(--blue-light));
+    border-radius: 1px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--pink-dark);
+    background: var(--white);
+    z-index: 1;
+  }
+  .timeline-item.blue::before { border-color: #7BB8D0; }
+  .timeline-item.move::before {
+    background: var(--yellow-dark);
+    border-color: var(--yellow-dark);
+    width: 8px; height: 8px;
+    left: -15px;
+    top: 12px;
+  }
+
+  .time-badge {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--pink-dark);
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .blue .time-badge { background: #7BB8D0; }
+
+  .event-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+  }
+  .event-card:active { transform: scale(0.98); }
+
+  .event-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .event-card .desc {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  .event-card .address {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #F8F4F0;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .map-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
+    border: 1.5px solid #A5D6A7;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .map-link:active {
+    transform: scale(0.97);
+    background: linear-gradient(135deg, #C8E6C9, #DCEDC8);
+  }
+  .map-link .map-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .map-link .map-label {
+    font-size: 10px;
+    color: #558B2F;
+    font-weight: 700;
+    display: block;
+    margin-top: 1px;
+  }
+  .map-link .map-addr {
+    display: block;
+  }
+  .map-link-info {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 4px;
+    padding: 0 4px;
+    line-height: 1.5;
+  }
+  .event-card .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, var(--pink-light), var(--blue-light));
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .event-card .link-btn:active {
+    transform: scale(0.95);
+  }
+
+  .move-card {
+    background: var(--yellow);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== OPTION CARD ===== */
+  .option-group {
+    margin-top: 8px;
+  }
+  .option-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .option-card {
+    background: var(--white);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .option-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .option-card .varieties {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+  .option-card .price {
+    display: inline-block;
+    background: var(--green);
+    color: #2D6B45;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-top: 6px;
+  }
+
+  /* ===== BULLET LIST ===== */
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 6px;
+  }
+  .bullet-list li {
+    font-size: 13px;
+    color: var(--text-light);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .bullet-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--pink-dark);
+    font-weight: bold;
+  }
+
+  /* ===== INFO SECTION ===== */
+  .info-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .info-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spot-mini {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #E8DDD4;
+  }
+  .spot-mini:last-child { border-bottom: none; }
+  .spot-mini .emoji-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    width: 36px;
+    text-align: center;
+  }
+  .spot-mini .spot-detail h4 {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .spot-mini .spot-detail p {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .spot-mini .spot-detail a {
+    color: var(--pink-dark);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* ===== PACKING LIST ===== */
+  .packing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .packing-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #F8F4F0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .packing-item.checked {
+    background: var(--green);
+    text-decoration: line-through;
+    color: #2D6B45;
+  }
+  .checkbox {
+    width: 20px; height: 20px;
+    border: 2px solid #D0C5B8;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .packing-item.checked .checkbox {
+    background: #2D6B45;
+    border-color: #2D6B45;
+    color: white;
+  }
+
+  /* ===== OTHER SPOTS ===== */
+  .other-spot {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .other-spot .emoji-circle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ===== NOTE CALLOUT ===== */
+  .callout {
+    background: var(--yellow);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .callout .callout-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 32px 16px;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .footer .flowers {
+    font-size: 28px;
+    letter-spacing: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  .timeline-item {
+    animation: slideUp 0.5s ease both;
+  }
+  .timeline-item:nth-child(1) { animation-delay: 0.05s; }
+  .timeline-item:nth-child(2) { animation-delay: 0.1s; }
+  .timeline-item:nth-child(3) { animation-delay: 0.15s; }
+  .timeline-item:nth-child(4) { animation-delay: 0.2s; }
+  .timeline-item:nth-child(5) { animation-delay: 0.25s; }
+  .timeline-item:nth-child(6) { animation-delay: 0.3s; }
+  .timeline-item:nth-child(7) { animation-delay: 0.35s; }
+  .timeline-item:nth-child(8) { animation-delay: 0.4s; }
+  .timeline-item:nth-child(9) { animation-delay: 0.45s; }
+  .timeline-item:nth-child(10) { animation-delay: 0.5s; }
+  .timeline-item:nth-child(11) { animation-delay: 0.55s; }
+  .timeline-item:nth-child(12) { animation-delay: 0.6s; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Confetti-like dots in bg */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle, var(--pink-light) 1px, transparent 1px),
+      radial-gradient(circle, var(--blue-light) 1px, transparent 1px),
+      radial-gradient(circle, var(--yellow) 1px, transparent 1px);
+    background-size: 60px 60px, 80px 80px, 70px 70px;
+    background-position: 0 0, 30px 40px, 15px 20px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <span class="header-emoji">🚗🌿</span>
+  <h1>旅のしおり</h1>
+  <p class="subtitle">那須高原 1泊2日の旅</p>
+  <div class="dates">🗓 2025年 3月6日（金）〜 7日（土）</div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="day1">🌸 1日目</button>
+  <button class="tab-btn" data-tab="day2">☀️ 2日目</button>
+  <button class="tab-btn" data-tab="info">📋 その他</button>
+  <button class="tab-btn" data-tab="packing">🎒 持ち物</button>
+</nav>
+
+<!-- ===== DAY 1 ===== -->
+<section class="section active" id="day1">
+  <div class="day-header">
+    <div class="day-number day1-color">1</div>
+    <div class="day-info">
+      <h2>3月6日（金）</h2>
+      <p>春日部 → 那須高原へ出発！</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <!-- 9:00 集合 -->
+    <div class="timeline-item">
+      <span class="time-badge">9:00</span>
+      <div class="event-card">
+        <h3>🚉 春日部駅 集合</h3>
+        <p class="desc">いよいよ出発！みんな集まったら那須に向かうよ〜</p>
+      </div>
+    </div>
+
+    <!-- 移動 -->
+    <div class="timeline-item move">
+      <div class="move-card">🚗 車で移動（約2.5時間）</div>
+    </div>
+
+    <!-- 11:30 ランチ -->
+    <div class="timeline-item">
+      <span class="time-badge">11:30</span>
+      <div class="event-card">
+        <h3>🍽 ランチ「芭蕉庵」</h3>
+        <p class="desc">那須の自然の中で美味しいお昼ごはん</p>
+        <a class="map-link" onclick="openMap('栃木県那須郡那須町芦野2753', '芭蕉庵')">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">栃木県那須郡那須町芦野２７５３</span><span class="map-label">▶ タップしてGoogle Mapで開く</span></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 移動 -->
+    <div class="timeline-item move">
+      <div class="move-card">🚗 車で移動（約1時間）</div>
+    </div>
+
+    <!-- 13:30 ステンドグラス -->
+    <div class="timeline-item">
+      <span class="time-badge">13:30</span>
+      <div class="event-card">
+        <h3>✨ ステンドグラス美術館</h3>
+        <p class="desc">英国コッツウォルズの貴族の館をモチーフにした美術館。1800年代のアンティークステンドグラスやパイプオルガンの生演奏が楽しめます</p>
+        <a class="map-link" onclick="openMap('那須ステンドグラス美術館', '那須ステンドグラス美術館')">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">那須ステンドグラス美術館</span><span class="map-label">▶ タップしてGoogle Mapで開く</span></span>
+        </a>
+        <div class="map-link-info">🕘 営業 9:30〜16:30</div>
+        <p class="desc" style="margin-top:6px; font-size:12px;">💰 大人 1,600円 ／ 中高生 1,000円 ／ 小学生 500円</p>
+        <a href="https://sgm-nasu.com/" target="_blank" class="link-btn">🔗 公式サイト</a>
+      </div>
+    </div>
+
+    <!-- 14:30 GOOD NEWS -->
+    <div class="timeline-item">
+      <span class="time-badge">14:30</span>
+      <div class="event-card">
+        <h3>🌳 GOOD NEWS</h3>
+        <p class="desc">森の中にある持続可能なまち。「バターのいとこ」をはじめ、おしゃれなカフェやショップが集まるスポット。ペットOK！</p>
+        <a class="map-link" onclick="openMap('栃木県那須郡那須町大字高久乙24-1', 'GOOD NEWS')">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">栃木県那須郡那須町大字高久乙24-1</span><span class="map-label">▶ タップしてGoogle Mapで開く</span></span>
+        </a>
+        <div class="map-link-info">🕘 9:00〜17:00 ／ 第2木曜定休 ／ 🅿️ 500円（アプリ会員は無料）</div>
+        <a href="https://gooooodnews.com/" target="_blank" class="link-btn">🔗 公式サイト</a>
+      </div>
+    </div>
+
+    <!-- 16:00 WHITE LAMP -->
+    <div class="timeline-item">
+      <span class="time-badge">16:00</span>
+      <div class="event-card">
+        <h3>🏕 WHITE LAMP</h3>
+        <p class="desc">今夜のお宿！那須高原の自然に囲まれた宿泊施設</p>
+        <a class="map-link" onclick="openMap('栃木県那須郡那須町字高久乙3812-1', 'WHITE LAMP')">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">栃木県那須郡那須町字高久乙 3812-1</span><span class="map-label">▶ タップしてGoogle Mapで開く</span></span>
+        </a>
+        <a href="https://y-resort.com/facility/" target="_blank" class="link-btn">🔗 施設情報</a>
+        <ul class="bullet-list" style="margin-top: 10px;">
+          <li>🔥 BBQ でわいわい！</li>
+          <li>🎮 ゲームで盛り上がろう</li>
+          <li>🔥 もしかしたらたき火があるかも…！</li>
+        </ul>
+        <div class="callout">
+          <span class="callout-emoji">🌙</span>
+          <span>22:00 くらいには就寝… 明日も楽しむぞ！</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DAY 2 ===== -->
+<section class="section" id="day2">
+  <div class="day-header">
+    <div class="day-number day2-color">2</div>
+    <div class="day-info">
+      <h2>3月7日（土）</h2>
+      <p>いちご狩り &amp; トリックアート！</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <!-- 8:00 起床 -->
+    <div class="timeline-item blue">
+      <span class="time-badge">8:00</span>
+      <div class="event-card">
+        <h3>☀️ 起床</h3>
+        <p class="desc">おはよう！朝食を食べて準備しよう</p>
+      </div>
+    </div>
+
+    <!-- 9:30 出発 -->
+    <div class="timeline-item blue">
+      <span class="time-badge">9:30</span>
+      <div class="event-card">
+        <h3>🚗 出発！</h3>
+        <p class="desc">チェックアウトして2日目のスタート</p>
+      </div>
+    </div>
+
+    <!-- NASUのラスク屋さん -->
+    <div class="timeline-item blue">
+      <span class="time-badge">9:30〜</span>
+      <div class="event-card">
+        <h3>🥐 NASUのラスク屋さん</h3>
+        <p class="desc">那須で人気のラスク専門店。お土産にぴったり！</p>
+        <a href="https://www.instagram.com/nasu_rusk3939/?hl=ja" target="_blank" class="link-btn">🔗 Instagram</a>
+      </div>
+    </div>
+
+    <!-- 10:00 いちご狩り -->
+    <div class="timeline-item blue">
+      <span class="time-badge">10:00</span>
+      <div class="event-card">
+        <h3>🍓 いちご狩り</h3>
+        <p class="desc">春の那須といえばいちご狩り！2つの候補があるよ</p>
+
+        <div class="option-group">
+          <div class="option-label">🅰️ 候補A</div>
+          <div class="option-card">
+            <h4>🍓 58ロハスクラブ</h4>
+            <p class="varieties">高級いちごを食べ比べ！<br>品種：<strong>ロイヤルクイーン</strong>・<strong>とちあいか</strong></p>
+            <span class="price">💰 3,000円</span>
+            <br>
+            <a href="https://58gh.jp/lohasclub/service/berrygarden/" target="_blank" class="link-btn" style="margin-top:8px;">🔗 詳細はこちら</a>
+          </div>
+
+          <div class="option-label">🅱️ 候補B</div>
+          <div class="option-card">
+            <h4>🐄 千本松牧場 いちご園</h4>
+            <p class="varieties">牧場遊びも一緒に楽しめる！<br>品種：<strong>とちおとめ</strong>・<strong>スカイベリー</strong>・<strong>ミルキーベリー</strong>・<strong>とちあいか</strong></p>
+            <span class="price">💰 2,600円</span>
+            <br>
+            <a href="https://www.senbonmatsu.com/strawberry/" target="_blank" class="link-btn" style="margin-top:8px;">🔗 詳細はこちら</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11:30 トリックアート -->
+    <div class="timeline-item blue">
+      <span class="time-badge">11:30</span>
+      <div class="event-card">
+        <h3>🎨 とりっくあーとぴあ</h3>
+        <p class="desc">目の錯覚を利用したトリックアートで写真を撮りまくろう！面白い写真がたくさん撮れるよ</p>
+        <a href="https://www.trick-art.jp/" target="_blank" class="link-btn">🔗 公式サイト</a>
+      </div>
+    </div>
+
+    <!-- 12:00 移動 & ランチ -->
+    <div class="timeline-item move">
+      <div class="move-card">🚗 車で移動 ＆ どこかでランチ 🍜</div>
+    </div>
+
+    <!-- 18:00 到着 -->
+    <div class="timeline-item blue">
+      <span class="time-badge">18:00</span>
+      <div class="event-card">
+        <h3>🚉 春日部駅 到着</h3>
+        <p class="desc">おつかれさま！楽しい旅でした 🎉</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INFO ===== -->
+<section class="section" id="info">
+  <div class="info-card">
+    <h3>📍 寄り道スポット</h3>
+    <p style="font-size:13px; color:var(--text-light); margin-bottom:12px;">時間があったら寄ってみよう！</p>
+
+    <div class="spot-mini">
+      <div class="emoji-icon">🌿</div>
+      <div class="spot-detail">
+        <h4>苔屋（小さな緑のインテリア）</h4>
+        <a class="map-link" onclick="openMap('栃木県那須町高久丙1148-559', '苔屋')">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">栃木県那須町高久丙１１４８−５５９</span><span class="map-label">▶ タップしてGoogle Mapで開く</span></span>
+        </a>
+        <p style="margin-top:4px;">苔のインテリアが並ぶ癒しスポット</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>🏨 主な行き先まとめ</h3>
+    <div class="spot-mini">
+      <div class="emoji-icon">🍽</div>
+      <div class="spot-detail">
+        <h4>芭蕉庵</h4>
+        <a class="map-link" onclick="openMap('栃木県那須郡那須町芦野2753', '芭蕉庵')" style="margin-top:4px;">
+          <span class="map-icon">📍</span>
+          <span><span class="map-addr">那須郡那須町芦野２７５３</span><span class="map-label">▶ Google Mapで開く</span></span>
+        </a>
+      </div>
+    </div>
+    <div class="spot-mini">
+      <div class="emoji-icon">✨</div>
+      <div class="spot-detail">
+        <h4>那須ステンドグラス美術館</h4>
+        <a href="https://sgm-nasu.com/" target="_blank">sgm-nasu.com</a>
+      </div>
+    </div>
+    <div class="spot-mini">
+      <div class="emoji-icon">🌳</div>
+      <div class="spot-detail">
+        <h4>GOOD NEWS</h4>
+        <a href="https://gooooodnews.com/" target="_blank">gooooodnews.com</a>
+      </div>
+    </div>
+    <div class="spot-mini">
+      <div class="emoji-icon">🏕</div>
+      <div class="spot-detail">
+        <h4>WHITE LAMP</h4>
+        <a href="https://y-resort.com/facility/" target="_blank">y-resort.com</a>
+      </div>
+    </div>
+    <div class="spot-mini">
+      <div class="emoji-icon">🍓</div>
+      <div class="spot-detail">
+        <h4>いちご狩り（2候補）</h4>
+        <a href="https://58gh.jp/lohasclub/service/berrygarden/" target="_blank">58ロハスクラブ</a>
+        <span style="margin: 0 4px;">|</span>
+        <a href="https://www.senbonmatsu.com/strawberry/" target="_blank">千本松牧場</a>
+      </div>
+    </div>
+    <div class="spot-mini">
+      <div class="emoji-icon">🎨</div>
+      <div class="spot-detail">
+        <h4>とりっくあーとぴあ</h4>
+        <a href="https://www.trick-art.jp/" target="_blank">trick-art.jp</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>💡 メモ</h3>
+    <div class="callout">
+      <span class="callout-emoji">⚠️</span>
+      <span>ステンドグラス美術館は<strong>3月7日(土)はイベント準備のため13時閉館</strong>です。1日目に行くスケジュールなので大丈夫！</span>
+    </div>
+    <div class="callout" style="margin-top: 8px; background: var(--pink-light);">
+      <span class="callout-emoji">🅿️</span>
+      <span>GOOD NEWSの駐車場は通常500円。<strong>公式アプリ</strong>をダウンロード＆会員登録で<strong>無料</strong>になるので事前に入れておこう！</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PACKING ===== -->
+<section class="section" id="packing">
+  <div class="info-card">
+    <h3>🎒 持ち物チェックリスト</h3>
+    <p style="font-size:12px; color:var(--text-light); margin-bottom:14px;">タップしてチェック ✓</p>
+    <div class="packing-grid" id="packingGrid">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="flowers">🌸🌿🍓✨</div>
+  <p>那須高原の旅、楽しもう！</p>
+</div>
+
+<script>
+// Open Google Maps (iPhone optimized)
+// Tries Google Maps app first via comgooglemaps:// scheme
+// Falls back to Google Maps web if app not installed
+function openMap(query, label) {
+  const encoded = encodeURIComponent(query);
+
+  // iOS: try Google Maps app scheme first
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+  if (isIOS) {
+    // Try to open Google Maps app
+    const appUrl = 'comgooglemaps://?q=' + encoded;
+    const webUrl = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
+
+    // Create a hidden iframe to test the scheme
+    const start = Date.now();
+    window.location.href = appUrl;
+
+    // If the app doesn't open within 500ms, fallback to web
+    setTimeout(function() {
+      if (Date.now() - start < 1500) {
+        window.location.href = webUrl;
+      }
+    }, 500);
+  } else {
+    // Non-iOS: open Google Maps web directly
+    window.open('https://www.google.com/maps/search/?api=1&query=' + encoded, '_blank');
+  }
+}
+
+// Tab switching
+const tabBtns = document.querySelectorAll('.tab-btn');
+const sections = document.querySelectorAll('.section');
+
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Packing list
+const packingItems = [
+  '着替え', '上着（防寒）', 'パジャマ', '歯ブラシ',
+  'タオル', '充電器', 'お財布', 'スマホ',
+  '免許証', '保険証', '日焼け止め', 'カメラ',
+  'お菓子（500円まで🍌可）', '飲み物', 'ウェットティッシュ', 'ゴミ袋'
+];
+
+const grid = document.getElementById('packingGrid');
+const checkedItems = {};
+
+// Try to load from URL hash
+try {
+  const hash = window.location.hash.slice(1);
+  if (hash) {
+    const decoded = decodeURIComponent(hash);
+    decoded.split(',').forEach(i => { checkedItems[i] = true; });
+  }
+} catch(e) {}
+
+function renderPacking() {
+  grid.innerHTML = '';
+  packingItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'packing-item' + (checkedItems[i] ? ' checked' : '');
+    div.innerHTML = `<div class="checkbox">${checkedItems[i] ? '✓' : ''}</div><span>${item}</span>`;
+    div.addEventListener('click', () => {
+      if (checkedItems[i]) delete checkedItems[i];
+      else checkedItems[i] = true;
+      renderPacking();
+    });
+    grid.appendChild(div);
+  });
+}
+renderPacking();
+</script>
+</body>
+</html>
